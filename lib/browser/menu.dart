@@ -10,7 +10,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 const String kNavigationExamplePage = '''
 <!DOCTYPE html><html>
 <head><title>Navigation Delegate Example</title></head>
@@ -218,7 +217,7 @@ class SampleMenu extends StatelessWidget {
   Future<void> _onListCookies(
       WebViewController controller, BuildContext context) async {
     final String cookies =
-    await controller.runJavascriptReturningResult('document.cookie');
+        await controller.runJavascriptReturningResult('document.cookie');
     // ignore: deprecated_member_use
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Column(
@@ -273,7 +272,7 @@ class SampleMenu extends StatelessWidget {
   Future<void> _onNavigationDelegateExample(
       WebViewController controller, BuildContext context) async {
     final String contentBase64 =
-    base64Encode(const Utf8Encoder().convert(kNavigationExamplePage));
+        base64Encode(const Utf8Encoder().convert(kNavigationExamplePage));
     await controller.loadUrl('data:text/html;base64,$contentBase64');
   }
 
@@ -288,9 +287,31 @@ class SampleMenu extends StatelessWidget {
 
   Future<void> _onFill(
       WebViewController controller, BuildContext context) async {
-    String a =
-        "document.querySelector('#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.AgroKb > div > div.RpC4Ne.oJeWuf > div.Pc9Gce.Wic03c > textarea').value='asdaf'";
-    await controller.runJavascript(a);
+    Logger logger = Logger();
+    String findListScript = """
+        var questionList = document.getElementsByClassName('o3Dpx')[0].children;
+         for(a of questionList){
+      a.getElementsByTagName('input')[0].focus()
+      if(a.textContent.includes('이름')){
+        document.execCommand('insertText', false, '김준표')
+      }
+      else if(a.textContent.includes('생년')){
+        document.execCommand('insertText', false, '970909')
+      }
+      else if(a.textContent.includes('번호')){
+        document.execCommand('insertText', false, '01099823356')
+      }
+      else if(a.textContent.includes('NIKE.COM')){
+        document.execCommand('insertText', false, 'bluepeng9@naver.com')
+      }
+    }
+        """;
+    String checkScript =
+        "for(i of document.getElementsByClassName('uHMk6b fsHoPb')){i.click()}";
+
+    await controller.runJavascript(findListScript);
+    await controller.runJavascript(checkScript);
+    logger.i('asdf');
   }
 
   Future<void> _onDoPostRequest(
@@ -332,7 +353,7 @@ class SampleMenu extends StatelessWidget {
     }
     final List<String> cookieList = cookies.split(';');
     final Iterable<Text> cookieWidgets =
-    cookieList.map((String cookie) => Text(cookie));
+        cookieList.map((String cookie) => Text(cookie));
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
