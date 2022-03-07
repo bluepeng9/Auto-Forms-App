@@ -78,6 +78,7 @@ class PageProvider {
   }
 
   Future<Store> insert(Store store) async {
+
     Database? db = await _instance.database;
     store.id = await db?.insert(storeTable, store.toMap());
     logger.i('insert');

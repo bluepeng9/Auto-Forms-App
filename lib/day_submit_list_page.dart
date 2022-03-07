@@ -36,14 +36,11 @@ class _DayDetailPageState extends State<DayDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    logger.i('qwe');
+    logger.i('submit list page build');
     return Scaffold(
       body: Column(
         children: [
-          // ListenableProvider<SubmitListProvider>(
-          //   create: (_) => SubmitListProvider.se(widget.selectedDay),
             DaySubmitList(widget.selectedDay),
-          // )
         ],
       ),
     );

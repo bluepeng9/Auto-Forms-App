@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    logger.e('cal');
+    logger.i('main build');
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -117,34 +117,91 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TableCalendar(
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, day, events) {
-                  // Provider.of<SubmitListProvider>(context).gettUtils.getFormatTime(day)
-                },
-              ),
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: DateTime.now(),
-
-              onDaySelected: (selectedDay, focusedDay) {
-                date = Utils.getFormatTime(selectedDay);
-                var provider =
-                    Provider.of<SubmitListProvider>(context, listen: false);
-                provider.selectedDay = date;
-                provider.getSubmitList();
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (_) =>
-                        DayDetailPage(Utils.getFormatTime(selectedDay)),
-                  ),
-                );
-              },
-            ),
+            _buildTableCalendar(context),
           ],
         ),
       ),
     );
   }
+
+  TableCalendar<Object?> _buildTableCalendar(BuildContext context) {
+    logger.e('cal build');
+    // context.read<SubmitListProvider>().getLength(day);
+    // var provider = Provider.of<SubmitListProvider>(
+    //   context,listen: false,
+    // );
+    var tableCalendar = TableCalendar(
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (context, day, events) {
+          logger.i('aa');
+          var date = Utils.getFormatTime(day);
+
+          // return _buildMarker(date);
+          return aa(date);
+        },
+        headerTitleBuilder: (context, day) {},
+      ),
+      firstDay: DateTime.utc(2010, 10, 16),
+      lastDay: DateTime.utc(2030, 3, 14),
+      focusedDay: DateTime.now(),
+      onDaySelected: (selectedDay, focusedDay) async {
+        date = Utils.getFormatTime(selectedDay);
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (_) => DayDetailPage(Utils.getFormatTime(selectedDay)),
+          ),
+        );
+      },
+    );
+
+    return tableCalendar;
+  }
+
+  Positioned _buildMarker(date) {
+    context.read<SubmitListProvider>().getLength(date);
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        width: 40,
+        height: 13,
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+        ),
+        child: Text(
+          context.watch<SubmitListProvider>().length2[date].toString(),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 10),
+        ),
+      ),
+    );
+  }
+}
+
+class aa extends StatelessWidget{
+
+  int date;
+  aa(this.date, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<SubmitListProvider>().getLength(date);
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        width: 40,
+        height: 13,
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+        ),
+        child: Text(
+          context.watch<SubmitListProvider>().length2[date].toString(),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 10),
+        ),
+      ),
+    );
+  }
+
+
 }

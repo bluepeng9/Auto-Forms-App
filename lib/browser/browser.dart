@@ -114,8 +114,9 @@ class NavigationControls extends StatelessWidget {
                         ),
                       );
                       logger.i(s.title);
+
                       Provider.of<SubmitListProvider>(context, listen: false)
-                          .getSubmitList();
+                          .getSubmitList3(Provider.of<SubmitListProvider>(context, listen: false).selectedDay3);
                     },
             ),
             IconButton(
