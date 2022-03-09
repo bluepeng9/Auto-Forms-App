@@ -120,6 +120,51 @@ class NavigationControls extends StatelessWidget {
                     },
             ),
             IconButton(
+              icon: const Icon(Icons.check_box),
+              onPressed: !webViewReady
+                  ? null
+                  : () async {
+                Logger logger = Logger();
+                logger.i('fill');
+                String findListScript = """
+        var questionList = document.getElementsByClassName('o3Dpx')[0].children;
+         for(a of questionList){
+             try {
+                a.getElementsByTagName('input')[0].focus()
+             } catch (error) { 
+                 continue;
+             }
+      if(a.textContent.includes('이름')){
+        document.execCommand('insertText', false, '김준표')
+      }
+      else if(a.textContent.includes('성함')){
+        document.execCommand('insertText', false, '김준표')
+      }
+      else if(a.textContent.includes('생년')){
+        document.execCommand('insertText', false, '970909')
+      }
+      else if(a.textContent.includes('번호')){
+        document.execCommand('insertText', false, '01099823356')
+      }
+      else if(a.textContent.includes('연락처')){
+        document.execCommand('insertText', false, '01099823356')
+      }
+      else if(a.textContent.includes('NIKE.COM')){
+        document.execCommand('insertText', false, 'bluepeng9@naver.com')
+      }
+      else if(a.textContent.includes('나이키 닷컴')){
+        document.execCommand('insertText', false, 'bluepeng9@naver.com')
+      }
+    }
+        """;
+                String checkScript =
+                    "for(i of document.getElementsByClassName('uHMk6b fsHoPb')){i.click()}";
+
+                await controller?.runJavascript(findListScript);
+                await controller?.runJavascript(checkScript);
+                    },
+            ),
+            IconButton(
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: !webViewReady
                   ? null
